@@ -3,6 +3,9 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --primary: #fc9a63;
+  --muted: #bbbaba;
+  --muted-foreground: #333333;
 }
 
 @theme inline {
@@ -10,6 +13,9 @@
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
 }
 
 @layer base {
