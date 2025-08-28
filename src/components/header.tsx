@@ -1,0 +1,130 @@
+"use client";
+
+import Image from "next/image";
+import Link from "next/link";
+
+import { useState } from "react";
+
+import { Button } from "@/components/ui/button";
+import { Icons } from "@/components/icons";
+import { cn } from "@/lib/utils";
+
+interface NavigationItem {
+  label?: string;
+  link?: string;
+}
+
+const navigation: NavigationItem[] = [
+  { label: "Dine out", link: "/" },
+  { label: "Delivery", link: "/" },
+  { label: "Take-away", link: "/" },
+];
+
+export function Header() {
+  const [isMenuToggled, setIsmMenuToggled] = useState(false);
+
+  const handleMobileNav = () => {
+    setIsmMenuToggled((prev) => !prev);
+  };
+
+  return (
+    <header className="py-4 lg:py-9.5">
+      <nav className="container grid items-center gap-1 max-lg:grid-cols-2 max-lg:grid-rows-2 lg:flex lg:justify-between">
+        {/* brand logo */}
+        <Link
+          href="/"
+          className="flex h-full items-center gap-2 max-lg:self-start"
+        >
+          <Image
+            src="/brand/logo.svg"
+            alt="Food Stop logo"
+            width={26}
+            height={26}
+          />
+          <span>Food Stop</span>
+        </Link>
+
+        {/* default navigation */}
+        <ul className="hidden items-center gap-5 lg:flex">
+          {navigation?.map((item) => (
+            <li key={item?.label}>
+              <Link href={item?.link || "/"}>{item?.label}</Link>
+            </li>
+          ))}
+        </ul>
+
+        {/* search box */}
+        <div className="grid grid-cols-[auto_1fr] gap-2 max-lg:col-[1/-1] max-lg:row-[2/-1]">
+          <Button variant="outline" size="icon" className="rounded-2xl p-2">
+            <Icons.location className="size-5" />
+          </Button>
+
+          <input
+            type="search"
+            placeholder="Search your favourite food"
+            className="border-muted min-w-25 rounded-2xl border-2 px-4 py-2 lg:min-w-72 xl:min-w-94"
+          />
+        </div>
+
+        {/* buttons group */}
+        <div className="flex items-center justify-end lg:gap-8">
+          <Button
+            variant="ghost"
+            size="icon"
+            aria-label="Cart"
+            className="lg:p-0"
+          >
+            <Icons.cart className="size-4 lg:size-5" />
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            aria-label="Lock"
+            className="lg:p-0"
+          >
+            <Icons.lock className="size-4 lg:size-5" />
+          </Button>
+          {/* menu opener */}
+          <Button
+            variant="ghost"
+            size="icon"
+            aria-label="Menu Opener"
+            onClick={handleMobileNav}
+            className="pr-0 lg:hidden"
+          >
+            <Icons.menu className="size-4" />
+          </Button>
+        </div>
+
+        {/* mobile navigation */}
+        <div
+          className={cn("bg-background fixed inset-0 hidden flex-col", {
+            "flex lg:hidden": isMenuToggled,
+          })}
+        >
+          {/* menu closer */}
+          <Button
+            variant="ghost"
+            size="icon"
+            aria-label="Menu Closer"
+            onClick={handleMobileNav}
+            className="m-5 self-end pt-0 pr-0 md:m-10"
+          >
+            <Icons.cross className="size-6" />
+          </Button>
+
+          {/* mobile menu */}
+          <ul className="grid h-full content-center justify-items-center gap-8">
+            {navigation?.map((item) => (
+              <li key={item?.label} onClick={handleMobileNav}>
+                <Link href={item?.link || "/"} className="text-3xl">
+                  {item?.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </nav>
+    </header>
+  );
+}
