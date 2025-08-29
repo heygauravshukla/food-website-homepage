@@ -27,3 +27,19 @@
 @utility container {
   @apply mx-auto px-5 md:px-10 lg:max-w-[67.5rem] xl:px-0;
 }
+
+/* Slider styles */
+/* .box {
+  cursor: grab;
+  transform-origin: center;
+  will-change: transform;
+  transition: transform 0.3s ease;
+}
+
+.box.active {
+  transform: scale(1.1);
+}
+
+.box:active {
+  cursor: grabbing;
+} */
