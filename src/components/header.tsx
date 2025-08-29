@@ -28,7 +28,7 @@ export function Header() {
   };
 
   return (
-    <header className="py-4 lg:py-9.5">
+    <header className="absolute inset-x-0 top-0 isolate z-50 py-4 lg:py-9.5">
       <nav className="container grid items-center gap-1 max-lg:grid-cols-2 max-lg:grid-rows-2 lg:flex lg:justify-between">
         {/* brand logo */}
         <Link
