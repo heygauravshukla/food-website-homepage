@@ -1,11 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Draggable, InertiaPlugin, MotionPathPlugin } from "gsap/all";
 gsap.registerPlugin(Draggable, InertiaPlugin, MotionPathPlugin);
 
@@ -26,18 +25,21 @@ const dishes: DishItem[] = [
 ];
 
 export function Hero() {
+  // Refs to store references to dish plate elements and container
   const dishPlates = useRef<Array<HTMLDivElement | null>>([]);
   const containerRef = useRef<HTMLDivElement>(null);
-  const [activeIndex, setActiveIndex] = useState(0);
 
+  // GSAP animation setup
   useGSAP(() => {
+    /* make sure there are ncessary elements to work with */
     if (!containerRef.current || dishPlates.current.length === 0) return;
 
+    // calculate positions for circular arrangement
     const boxesAmount = dishes.length;
     const step = 360 / boxesAmount;
     let nextIndex = 0;
 
-    // Set initial positions
+    // initialize positions of dish plates along the circular path
     gsap.set(dishPlates.current.filter(Boolean), {
       motionPath: {
         path: "#myPath",
@@ -49,31 +51,52 @@ export function Hero() {
       },
     });
 
-    // Create draggable
+    // draggable functionality for rotation (for mobile devices)
     Draggable.create(containerRef.current, {
       type: "rotation",
       inertia: true,
+
+      /* add snapping effect */
       snap: (endVal) => {
         const snap = gsap.utils.snap(step, endVal);
         const modulus = snap % 360;
         nextIndex = Math.abs((modulus > 0 ? 360 - modulus : modulus) / step);
         return snap;
       },
-      onThrowComplete: () => {
-        const plates = dishPlates.current.filter(Boolean);
-        plates[activeIndex]?.classList?.toggle("active");
-        plates[nextIndex]?.classList?.toggle("active");
-        setActiveIndex(nextIndex);
-      },
     });
-  }, [activeIndex]);
+
+    // create quick rotation animation function
+    const rotateTo = gsap.quickTo(containerRef.current, "rotation", {
+      duration: 0.5,
+      ease: "power2.out",
+    });
+
+    // handle mouse wheel rotation
+    const handleWheel = (event: WheelEvent) => {
+      const sensitivity = 0.5;
+      const currentRotation = gsap.getProperty(
+        containerRef.current,
+        "rotation",
+      ) as number;
+      rotateTo(currentRotation + event.deltaY * sensitivity);
+    };
+
+    // add wheel event listener
+    document.addEventListener("wheel", handleWheel);
+
+    // cleanup function
+    return () => {
+      document.removeEventListener("wheel", handleWheel);
+    };
+  }, []);
 
   return (
-    <section className="hero-section">
+    <section className="relative">
       <div className="mx-auto max-w-7xl py-20">
         <div className="container grid items-end gap-10 xl:grid-cols-2">
-          {/* text box */}
+          {/* Left side content section */}
           <div>
+            {/* Hero title and description */}
             <h1 className="grid gap-1 text-3xl sm:text-5xl">
               <span className="text-primary font-semibold">Delicious.</span>
               <span className="text-muted-foreground font-medium">
@@ -81,26 +104,28 @@ export function Hero() {
               </span>
             </h1>
 
+            {/* Description text */}
             <p className="mt-4 max-w-xl text-sm sm:mt-6">
-              Hunger pangs? You’re at the right stop to drive it away! Order
-              delicious food or reserve a table at your next cafe from the
+              Hunger pangs? You&apos;re at the right stop to drive it away!
+              Order delicious food or reserve a table at your next cafe from the
               comfort of your home!
             </p>
 
+            {/* Tagline */}
             <p className="text-muted-foreground mt-10 text-2xl font-medium italic sm:mt-12">
               One stop, Many routes
             </p>
 
-            {/* button group */}
+            {/* Action buttons */}
             <div className="mt-4 flex flex-wrap items-center gap-3">
               <Button variant="outline">Book a table</Button>
               <Button size="lg">Order now!</Button>
             </div>
           </div>
 
-          {/* dishes wheel */}
+          {/* Right side - Interactive dish wheel */}
           <div ref={containerRef} className="relative">
-            {/* svg to mimic border */}
+            {/* Circular path SVG */}
             <svg viewBox="0 0 400 400">
               <path
                 strokeWidth="2"
@@ -111,14 +136,14 @@ export function Hero() {
               ></path>
             </svg>
 
-            {/* dish plates */}
+            {/* Dish plates arranged in circle */}
             {dishes.map((dish, index) => (
               <div
                 key={dish.name}
                 ref={(el: HTMLDivElement | null) => {
                   dishPlates.current[index] = el;
                 }}
-                className={`box absolute top-0 left-0 grid size-40 place-content-center transition-transform ${index === 0 ? "active" : ""}`}
+                className={`box absolute top-0 left-0 z-10 grid size-40 place-content-center transition-transform ${index === 0 ? "active" : ""}`}
               >
                 <Image
                   src={dish.image || "/placeholder-image.svg"}
