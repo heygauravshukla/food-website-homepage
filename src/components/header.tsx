@@ -33,7 +33,7 @@ export function Header() {
         {/* brand logo */}
         <Link
           href="/"
-          className="flex h-full items-center gap-2 max-lg:self-start"
+          className="flex h-full items-center gap-5 max-lg:self-start"
         >
           <Image
             src="/brand/logo.svg"
@@ -41,11 +41,11 @@ export function Header() {
             width={26}
             height={26}
           />
-          <span>Food Stop</span>
+          <span className="text-xl font-semibold">Food Stop</span>
         </Link>
 
         {/* default navigation */}
-        <ul className="hidden items-center gap-5 lg:flex">
+        <ul className="hidden items-center gap-5 lg:flex xl:gap-13.5">
           {navigation?.map((item) => (
             <li key={item?.label}>
               <Link href={item?.link || "/"}>{item?.label}</Link>
@@ -55,14 +55,18 @@ export function Header() {
 
         {/* search box */}
         <div className="grid grid-cols-[auto_1fr] gap-2 max-lg:col-[1/-1] max-lg:row-[2/-1]">
-          <Button variant="outline" size="icon" className="rounded-2xl p-2">
+          <Button
+            variant="outline"
+            size="icon"
+            className="rounded-2xl bg-[#F3F0ED] p-2"
+          >
             <Icons.location className="size-5" />
           </Button>
 
           <input
             type="search"
             placeholder="Search your favourite food"
-            className="border-muted min-w-25 rounded-2xl border-2 px-4 py-2 lg:min-w-72 xl:min-w-94"
+            className="border-muted min-w-25 rounded-2xl border-2 bg-[#F3F0ED] px-4 py-2 lg:min-w-72 xl:min-w-94"
           />
         </div>
 
