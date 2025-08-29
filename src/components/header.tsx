@@ -102,7 +102,7 @@ export function Header() {
 
         {/* mobile navigation */}
         <div
-          className={cn("bg-background fixed inset-0 hidden flex-col", {
+          className={cn("bg-background fixed inset-0 z-50 hidden flex-col", {
             "flex lg:hidden": isMenuToggled,
           })}
         >
