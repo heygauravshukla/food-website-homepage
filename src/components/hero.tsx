@@ -22,6 +22,12 @@ const dishes: DishItem[] = [
   { name: "North Indian", image: "/dishes/north-indian.svg" },
   { name: "Salad", image: "/dishes/salad.svg" },
   { name: "South Indian", image: "/dishes/south-indian.svg" },
+  { name: "Italian", image: "/dishes/italian.svg" },
+  { name: "Mexican", image: "/dishes/mexican.svg" },
+  { name: "Non veg", image: "/dishes/non-veg.svg" },
+  { name: "North Indian", image: "/dishes/north-indian.svg" },
+  { name: "Salad", image: "/dishes/salad.svg" },
+  { name: "South Indian", image: "/dishes/south-indian.svg" },
 ];
 
 export function Hero() {
@@ -91,15 +97,15 @@ export function Hero() {
   }, []);
 
   return (
-    <section className="relative">
-      <div className="mx-auto max-w-7xl py-20">
-        <div className="container grid items-end gap-10 xl:grid-cols-2">
+    <section>
+      <div className="relative mx-auto max-w-7xl overflow-hidden pt-74 pb-22">
+        <div className="container grid items-end gap-30 xl:grid-cols-[2fr_3fr]">
           {/* Left side content section */}
-          <div>
+          <div className="z-20">
             {/* Hero title and description */}
-            <h1 className="grid gap-1 text-3xl sm:text-5xl">
+            <h1 className="x grid gap-1 text-3xl sm:text-5xl">
               <span className="text-primary font-semibold">Delicious.</span>
-              <span className="text-muted-foreground font-medium">
+              <span className="text-muted-foreground font-medium xl:text-4xl">
                 One stop destination
               </span>
             </h1>
@@ -112,7 +118,7 @@ export function Hero() {
             </p>
 
             {/* Tagline */}
-            <p className="text-muted-foreground mt-10 text-2xl font-medium italic sm:mt-12">
+            <p className="text-muted-foreground mt-10 text-2xl font-medium italic sm:mt-12 xl:mt-11 xl:text-3xl">
               One stop, Many routes
             </p>
 
@@ -124,36 +130,54 @@ export function Hero() {
           </div>
 
           {/* Right side - Interactive dish wheel */}
-          <div ref={containerRef} className="relative">
-            {/* Circular path SVG */}
-            <svg viewBox="0 0 400 400">
-              <path
-                strokeWidth="2"
-                stroke="currentColor"
-                id="myPath"
-                fill="none"
-                d="M396,200 C396,308.24781 308.24781,396 200,396 91.75219,396 4,308.24781 4,200 4,91.75219 91.75219,4 200,4 308.24781,4 396,91.75219 396,200 z"
-              ></path>
-            </svg>
-
-            {/* Dish plates arranged in circle */}
-            {dishes.map((dish, index) => (
+          <div className="-order-1 xl:order-1">
+            <div className="bg-primary absolute inset-x-0 top-0 z-10 grid aspect-square w-screen items-end justify-items-center overflow-hidden rounded-b-full xl:right-auto xl:left-0 xl:w-294 xl:translate-x-1/5 xl:-translate-y-3/5 xl:rounded-full">
               <div
-                key={dish.name}
-                ref={(el: HTMLDivElement | null) => {
-                  dishPlates.current[index] = el;
-                }}
-                className={`box absolute top-0 left-0 z-10 grid size-40 place-content-center transition-transform ${index === 0 ? "active" : ""}`}
+                ref={containerRef}
+                className="size-80 translate-y-1/2 xl:size-150"
               >
-                <Image
-                  src={dish.image || "/placeholder-image.svg"}
-                  alt={dish.name || "Food dish"}
-                  width={113}
-                  height={113}
-                  className="select-none"
-                />
+                {/* Circular path SVG */}
+                <svg
+                  width={571}
+                  height={571}
+                  viewBox="0 0 571 571"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <g filter="url(#filter0_d_1_40)">
+                    <path
+                      d="M565.129,281.62 A280,280 0 0,0 5.129,281.62 A280,280 0 0,0 565.129,281.62 Z"
+                      transform="rotate(37.4826 285.129 281.62)"
+                      stroke="#35580F"
+                      strokeWidth={2}
+                      strokeLinejoin="round"
+                      strokeDasharray="10 20"
+                      id="myPath"
+                      fill="none"
+                      shapeRendering="crispEdges"
+                    />
+                  </g>
+                </svg>
+
+                {/* Dish plates arranged in circle */}
+                {dishes?.map((dish, index) => (
+                  <div
+                    key={index}
+                    ref={(el: HTMLDivElement | null) => {
+                      dishPlates.current[index] = el;
+                    }}
+                    className={`box absolute top-0 left-0 z-10 grid size-40 place-content-center transition-transform ${index === 0 ? "active" : ""}`}
+                  >
+                    <Image
+                      src={dish?.image || "/placeholder-image.svg"}
+                      alt={dish?.name || "Food dish"}
+                      width={113}
+                      height={113}
+                    />
+                  </div>
+                ))}
               </div>
-            ))}
+            </div>
           </div>
         </div>
       </div>
